@@ -6,8 +6,11 @@
 
 use log::{debug, info};
 use std::borrow::Cow;
+use std::process::Output;
+use std::time::Duration;
 use thiserror::Error;
 use tokio::process::Command;
+use tokio::time::sleep;
 
 use crate::DeployDataDefsError;
 
@@ -352,6 +355,7 @@ pub async fn deploy_profile(
             .map_err(DeployProfileError::SSHSpawnActivate)?;
 
         info!("Creating activation waiter");
+        sleep(Duration::from_secs(2)).await;
 
         let mut ssh_wait_command = Command::new("ssh");
         ssh_wait_command.arg(&ssh_addr);
